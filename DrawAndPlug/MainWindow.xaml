@@ -10,6 +10,9 @@
         <ToolBarTray DockPanel.Dock="Top" Background="LightGray">
             <ToolBar Margin="3">
                 <Button Click="Save_Clicked" Content="Save"/>
+            </ToolBar>
+            <ToolBar Margin="3">
+                <Button Click="Clear_Clicked" Content="Clear all"/>
                 <Button Click="Undo_Clicked" Content="Undo"/>
                 <Button Click="Redo_Clicked" Content="Redo"/>
             </ToolBar>
@@ -19,13 +22,13 @@
         </ToolBarTray>
         <ToolBarTray DockPanel.Dock="Left" Orientation="Vertical" Background="LightGray">
             <ToolBar  Margin="3">
-                <Button Background="Black" Width="20" Height="20" Margin="5"/>
-                <Button Background="Green" Width="20" Height="20" Margin="5"/>
-                <Button Background="Blue" Width="20" Height="20" Margin="5"/>
-                <Button Background="Red" Width="20" Height="20" Margin="5"/>
+                <Button Click="BlackStroke_Clicked" Background="Black" Width="20" Height="20" Margin="5"/>
+                <Button Click="GreenStroke_Clicked" Background="Green" Width="20" Height="20" Margin="5"/>
+                <Button Click="BlueStroke_Clicked" Background="Blue" Width="20" Height="20" Margin="5"/>
+                <Button Click="RedStroke_Clicked" Background="Red" Width="20" Height="20" Margin="5"/>
             </ToolBar>
         </ToolBarTray>
-        <InkCanvas/>
+        <InkCanvas x:Name="inkCanvas"/>
 
     </DockPanel>
 </Window>
