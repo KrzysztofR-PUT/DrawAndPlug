@@ -1,0 +1,31 @@
+﻿<Window x:Class="DrawAndPlug.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DrawAndPlug"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="500" Width="525">
+    <DockPanel>
+        <ToolBarTray DockPanel.Dock="Top" Background="LightGray">
+            <ToolBar Margin="3">
+                <Button Click="Save_Clicked" Content="Save"/>
+                <Button Click="Undo_Clicked" Content="Undo"/>
+                <Button Click="Redo_Clicked" Content="Redo"/>
+            </ToolBar>
+            <ToolBar Margin="3">
+                <Button Click="AddPlugin_Clicked" Content="Add plug-in"/>
+            </ToolBar>
+        </ToolBarTray>
+        <ToolBarTray DockPanel.Dock="Left" Orientation="Vertical" Background="LightGray">
+            <ToolBar  Margin="3">
+                <Button Background="Black" Width="20" Height="20" Margin="5"/>
+                <Button Background="Green" Width="20" Height="20" Margin="5"/>
+                <Button Background="Blue" Width="20" Height="20" Margin="5"/>
+                <Button Background="Red" Width="20" Height="20" Margin="5"/>
+            </ToolBar>
+        </ToolBarTray>
+        <InkCanvas/>
+
+    </DockPanel>
+</Window>
