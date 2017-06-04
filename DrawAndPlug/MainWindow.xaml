@@ -13,11 +13,13 @@
             </ToolBar>
             <ToolBar Margin="3">
                 <Button Click="Clear_Clicked" Content="Clear all"/>
+                <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
                 <Button Click="Undo_Clicked" Content="Undo"/>
+                <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
                 <Button Click="Redo_Clicked" Content="Redo"/>
             </ToolBar>
-            <ToolBar Margin="3">
-                <Button Click="AddPlugin_Clicked" Content="Add plug-in"/>
+            <ToolBar x:Name="pluginBar" Margin="3">
+                <Button Click="AddPlugin_Clicked" FontWeight="Bold" Content="Add plug-in"/>
             </ToolBar>
         </ToolBarTray>
         <ToolBarTray DockPanel.Dock="Left" Orientation="Vertical" Background="LightGray">

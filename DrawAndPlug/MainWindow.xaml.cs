@@ -14,6 +14,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Win32;
 using System.IO;
+using System.Reflection;
+using PluginInterface;
 
 namespace DrawAndPlug
 {
@@ -22,22 +24,57 @@ namespace DrawAndPlug
     /// </summary>
     public partial class MainWindow : Window
     {
+        private static string pluginDir = @".\plugins\";
         System.Windows.Ink.StrokeCollection _added;
         System.Windows.Ink.StrokeCollection _removed;
         private bool handle = true;
+        
 
         public MainWindow()
         {
             InitializeComponent();
+            LoadPlugins();
             inkCanvas.Strokes.StrokesChanged += Strokes_StrokesChanged;
         }
 
-        private void Strokes_StrokesChanged(object sender, System.Windows.Ink.StrokeCollectionChangedEventArgs e)
+
+
+        private void AddPlugin_Clicked(object sender, RoutedEventArgs e)
         {
-            if (handle)
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Plugins (*.dll)|*dll";
+
+            if (openFileDialog.ShowDialog() == true)
             {
-                _added = e.Added;
-                _removed = e.Removed;
+                if (!Directory.Exists(pluginDir))
+                    Directory.CreateDirectory(pluginDir);
+
+                File.Copy(openFileDialog.FileName, pluginDir + openFileDialog.SafeFileName);
+            }
+        }
+
+        private void LoadPlugins()
+        {
+            DirectoryInfo directoryInfo = new DirectoryInfo(pluginDir);
+            if (directoryInfo.Exists) {
+                foreach (var file in directoryInfo.GetFiles("*.dll"))
+                {
+                    var assembly = Assembly.LoadFrom(file.FullName);
+                    var types = assembly.GetTypes();
+
+                    foreach (var type in types)
+                    {
+                        if (type.IsClass && type.IsPublic && typeof(IPlugin).IsAssignableFrom(type))
+                        {
+                            var obj = (IPlugin)Activator.CreateInstance(type);
+                            Button button = new Button();
+                            button.Content = obj.GetOperationName();
+                            Separator separator = new Separator();
+                            pluginBar.Items.Add(separator);
+                            pluginBar.Items.Add(button);
+                        }
+                    }
+                }
             }
         }
 
@@ -74,9 +111,13 @@ namespace DrawAndPlug
             handle = true;
         }
 
-        private void AddPlugin_Clicked(object sender, RoutedEventArgs e)
+        private void Strokes_StrokesChanged(object sender, System.Windows.Ink.StrokeCollectionChangedEventArgs e)
         {
-            
+            if (handle)
+            {
+                _added = e.Added;
+                _removed = e.Removed;
+            }
         }
 
         private void GreenStroke_Clicked(object sender, RoutedEventArgs e)

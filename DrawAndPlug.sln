@@ -5,6 +5,12 @@ VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DrawAndPlug", "DrawAndPlug\DrawAndPlug.csproj", "{6933AD5C-3519-4E85-8E9E-1989ECC07695}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PluginInterface", "PluginInterface\PluginInterface.csproj", "{79051822-3099-4781-9492-BC30B3C4B6FA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WatermarkPlugin", "WatermarkPlugin\WatermarkPlugin.csproj", "{04CCB14D-8FC2-4C3C-B126-1D3CCA6BEFE8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GrayscalePlugin", "GrayscalePlugin\GrayscalePlugin.csproj", "{792C161C-97E2-46F8-9757-AB20597AB415}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +21,18 @@ Global
 		{6933AD5C-3519-4E85-8E9E-1989ECC07695}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6933AD5C-3519-4E85-8E9E-1989ECC07695}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6933AD5C-3519-4E85-8E9E-1989ECC07695}.Release|Any CPU.Build.0 = Release|Any CPU
+		{79051822-3099-4781-9492-BC30B3C4B6FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{79051822-3099-4781-9492-BC30B3C4B6FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{79051822-3099-4781-9492-BC30B3C4B6FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{79051822-3099-4781-9492-BC30B3C4B6FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04CCB14D-8FC2-4C3C-B126-1D3CCA6BEFE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04CCB14D-8FC2-4C3C-B126-1D3CCA6BEFE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04CCB14D-8FC2-4C3C-B126-1D3CCA6BEFE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04CCB14D-8FC2-4C3C-B126-1D3CCA6BEFE8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{792C161C-97E2-46F8-9757-AB20597AB415}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{792C161C-97E2-46F8-9757-AB20597AB415}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{792C161C-97E2-46F8-9757-AB20597AB415}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{792C161C-97E2-46F8-9757-AB20597AB415}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
