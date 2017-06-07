@@ -17,9 +17,9 @@ namespace DrawAndPlug
     {
         public static BitmapFrame CreateBitmapSource(InkCanvas inkCanvas)
         {
-            int margin = (int)inkCanvas.Margin.Left;
-            int width = (int)inkCanvas.ActualWidth - margin;
-            int height = (int)inkCanvas.ActualHeight - margin;
+            int margin = 0;// (int)inkCanvas.Margin.Left;
+            int width = (int)inkCanvas.ActualWidth;// - margin;
+            int height = (int)inkCanvas.ActualHeight;// - margin;
 
             RenderTargetBitmap rtb = new RenderTargetBitmap(width, height, 96d, 96d, PixelFormats.Default);
             rtb.Render(inkCanvas);

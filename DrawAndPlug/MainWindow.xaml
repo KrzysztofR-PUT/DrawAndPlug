@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="500" Width="525">
     <DockPanel>
-        <ToolBarTray DockPanel.Dock="Top" Background="LightGray">
+        <ToolBarTray Height="40" DockPanel.Dock="Top" Background="LightGray">
             <ToolBar Margin="3">
                 <Button Click="Save_Clicked" Content="Save"/>
             </ToolBar>
@@ -22,7 +22,7 @@
                 <Button Click="AddPlugin_Clicked" FontWeight="Bold" Content="Add plug-in"/>
             </ToolBar>
         </ToolBarTray>
-        <ToolBarTray DockPanel.Dock="Left" Orientation="Vertical" Background="LightGray">
+        <ToolBarTray DockPanel.Dock="Left" Width="40" Orientation="Vertical" Background="LightGray">
             <ToolBar  Margin="3">
                 <Button Click="BlackStroke_Clicked" Background="Black" Width="20" Height="20" Margin="5"/>
                 <Button Click="GreenStroke_Clicked" Background="Green" Width="20" Height="20" Margin="5"/>
@@ -34,7 +34,7 @@
                 <Button Click="RectangleTool_Clicked" BorderBrush="Black" Width="20" Height="20" Margin="5"/>
             </ToolBar>
         </ToolBarTray>
-        <InkCanvas x:Name="inkCanvas" MouseDown="canvas_MouseDown" MouseUp="canvas_MouseUp"/>
+        <InkCanvas x:Name="inkCanvas" ClipToBounds="True" MouseDown="canvas_MouseDown" MouseUp="canvas_MouseUp"/>
 
     </DockPanel>
 </Window>

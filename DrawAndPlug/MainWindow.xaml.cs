@@ -40,18 +40,6 @@ namespace DrawAndPlug
             InitializeComponent();
             LoadPlugins();
             inkCanvas.Strokes.StrokesChanged += Strokes_StrokesChanged;
-            //inkCanvas.UseCustomCursor = true;                     //zmienia kursor
-            //inkCanvas.EditingMode = InkCanvasEditingMode.None;    //zabrania rysowania
-
-            /*Ellipse myEllipse = new Ellipse();                    //rysowanie elipsy
-            SolidColorBrush mySolidColorBrush = new SolidColorBrush();
-            mySolidColorBrush.Color = Color.FromArgb(255, 255, 255, 0);
-            myEllipse.Fill = mySolidColorBrush;
-            myEllipse.StrokeThickness = 2;
-            myEllipse.Stroke = Brushes.Black;
-            myEllipse.Width = 200;
-            myEllipse.Height = 100;
-            inkCanvas.Children.Add(myEllipse);*/
         }
 
 
@@ -89,10 +77,41 @@ namespace DrawAndPlug
                             Separator separator = new Separator();
                             pluginBar.Items.Add(separator);
                             pluginBar.Items.Add(button);
+                            button.Click += (object sender, RoutedEventArgs e) =>
+                            {
+                                System.Drawing.Bitmap bitmap = obj.GetElement(InkOperation.CreateBitmapSource(inkCanvas));
+                                inkCanvas.Strokes.Clear();
+                                inkCanvas.Children.Clear();
+                                inkCanvas.Children.Add(ConvertDrawingImageToWPFImage(Crop(bitmap)));
+                            };
                         }
                     }
                 }
             }
+        }
+
+        private System.Windows.Controls.Image ConvertDrawingImageToWPFImage(System.Drawing.Image gdiImg)
+        {
+            System.Windows.Controls.Image img = new System.Windows.Controls.Image();
+            //convert System.Drawing.Image to WPF image
+            System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(gdiImg);
+            IntPtr hBitmap = bmp.GetHbitmap();
+            System.Windows.Media.ImageSource WpfBitmap = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(hBitmap, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+
+            img.Source = WpfBitmap;
+            img.Width = gdiImg.Width;
+            img.Height = gdiImg.Height;
+            img.Stretch = System.Windows.Media.Stretch.Fill;
+            return img;
+        }
+
+        public static System.Drawing.Bitmap Crop(System.Drawing.Image myImage)
+        {
+            System.Drawing.Bitmap croppedBitmap = new System.Drawing.Bitmap(myImage);
+            croppedBitmap = croppedBitmap.Clone(
+                            new System.Drawing.Rectangle(40, 40, myImage.Width -40, myImage.Height -40),
+                            System.Drawing.Imaging.PixelFormat.DontCare);
+            return croppedBitmap;
         }
 
         private void Save_Clicked(object sender, RoutedEventArgs e)
@@ -102,7 +121,6 @@ namespace DrawAndPlug
             if (saveFileDialog.ShowDialog() == true)
             {
                 BitmapFrame frame = InkOperation.CreateBitmapSource(inkCanvas);
-
                 FileStream stream = new FileStream(saveFileDialog.FileName, FileMode.Create);
                 var encoder = new PngBitmapEncoder();
                 encoder.Interlace = PngInterlaceOption.On;
