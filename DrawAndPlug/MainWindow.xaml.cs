@@ -16,6 +16,7 @@ using Microsoft.Win32;
 using System.IO;
 using System.Reflection;
 using PluginInterface;
+using System.Collections;
 
 namespace DrawAndPlug
 {
@@ -27,6 +28,10 @@ namespace DrawAndPlug
         private static string pluginDir = @".\plugins\";
         System.Windows.Ink.StrokeCollection _added;
         System.Windows.Ink.StrokeCollection _removed;
+
+        Stack addedStack = new Stack();
+        Stack removedStack = new Stack();
+
         private bool handle = true;
         private bool rectangleMode = false;
 
@@ -80,9 +85,11 @@ namespace DrawAndPlug
                             button.Click += (object sender, RoutedEventArgs e) =>
                             {
                                 System.Drawing.Bitmap bitmap = obj.GetElement(InkOperation.CreateBitmapSource(inkCanvas));
-                                inkCanvas.Strokes.Clear();
-                                inkCanvas.Children.Clear();
-                                inkCanvas.Children.Add(ConvertDrawingImageToWPFImage(Crop(bitmap)));
+                                //inkCanvas.Strokes.Clear();
+                                //inkCanvas.Children.Clear();
+                                System.Windows.Controls.Image img = ConvertDrawingImageToWPFImage(Crop(bitmap));
+                                addedStack.Push(img);
+                                inkCanvas.Children.Add(img);
                             };
                         }
                     }
@@ -132,17 +139,59 @@ namespace DrawAndPlug
 
         private void Undo_Clicked(object sender, RoutedEventArgs e)
         {
-            handle = false;
+            /*handle = false;
             inkCanvas.Strokes.Remove(_added);
             inkCanvas.Strokes.Add(_removed);
+            handle = true;*/
+            handle = false;
+            if (addedStack.Count > 0)
+            {
+                Object top = addedStack.Pop();
+                if (top is System.Windows.Ink.StrokeCollection)
+                {
+                    System.Windows.Ink.StrokeCollection strokesToRemove = (System.Windows.Ink.StrokeCollection)top;
+                    removedStack.Push(strokesToRemove);
+                    inkCanvas.Strokes.Remove(strokesToRemove);
+                } else if (top is Rectangle)
+                {
+                    Rectangle rectangleToRemove = (Rectangle)top;
+                    removedStack.Push(rectangleToRemove);
+                    inkCanvas.Children.Remove(rectangleToRemove);
+                } else if (top is System.Windows.Controls.Image)
+                {
+                    System.Windows.Controls.Image imageToRemove = (System.Windows.Controls.Image)top;
+                    removedStack.Push(imageToRemove);
+                    inkCanvas.Children.Remove(imageToRemove);
+                }
+            }
             handle = true;
         }
 
         private void Redo_Clicked(object sender, RoutedEventArgs e)
         {
             handle = false;
-            inkCanvas.Strokes.Add(_added);
-            inkCanvas.Strokes.Remove(_removed);
+            if (removedStack.Count > 0)
+            {
+                Object top = removedStack.Pop();
+                if (top is System.Windows.Ink.StrokeCollection)
+                {
+                    System.Windows.Ink.StrokeCollection strokesToAdd = (System.Windows.Ink.StrokeCollection)top;
+                    addedStack.Push(strokesToAdd);
+                    inkCanvas.Strokes.Add(strokesToAdd);
+                }
+                else if (top is Rectangle)
+                {
+                    Rectangle rectangleToAdd = (Rectangle)top;
+                    addedStack.Push(rectangleToAdd);
+                    inkCanvas.Children.Add(rectangleToAdd);
+                }
+                else if (top is System.Windows.Controls.Image)
+                {
+                    System.Windows.Controls.Image imgToAdd = (System.Windows.Controls.Image)top;
+                    addedStack.Push(imgToAdd);
+                    inkCanvas.Children.Add(imgToAdd);
+                }
+            }
             handle = true;
         }
         
@@ -150,6 +199,8 @@ namespace DrawAndPlug
         {
             if (handle)
             {
+                addedStack.Push(e.Added);
+                //removedStack.Push(e.Removed);
                 _added = e.Added;
                 _removed = e.Removed;
             }
@@ -238,6 +289,7 @@ namespace DrawAndPlug
                 InkCanvas.SetTop(rect, endingPosition.Y);
 
             inkCanvas.Children.Add(rect);
+            addedStack.Push(rect);
         }
     }
 }
