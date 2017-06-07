@@ -29,8 +29,12 @@
                 <Button Click="BlueStroke_Clicked" Background="Blue" Width="20" Height="20" Margin="5"/>
                 <Button Click="RedStroke_Clicked" Background="Red" Width="20" Height="20" Margin="5"/>
             </ToolBar>
+            <ToolBar  Margin="3">
+                <Button Click="PenTool_Clicked" Content="*" Width="20" Height="20" Margin="5"/>
+                <Button Click="RectangleTool_Clicked" BorderBrush="Black" Width="20" Height="20" Margin="5"/>
+            </ToolBar>
         </ToolBarTray>
-        <InkCanvas x:Name="inkCanvas"/>
+        <InkCanvas x:Name="inkCanvas" MouseDown="canvas_MouseDown" MouseUp="canvas_MouseUp"/>
 
     </DockPanel>
 </Window>

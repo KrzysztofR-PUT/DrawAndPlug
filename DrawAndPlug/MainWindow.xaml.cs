@@ -28,13 +28,30 @@ namespace DrawAndPlug
         System.Windows.Ink.StrokeCollection _added;
         System.Windows.Ink.StrokeCollection _removed;
         private bool handle = true;
-        
+        private bool rectangleMode = false;
+
+        private Point startingPosition;
+        private Point endingPosition;
+
+        private Color selectedColor = Colors.Black;
 
         public MainWindow()
         {
             InitializeComponent();
             LoadPlugins();
             inkCanvas.Strokes.StrokesChanged += Strokes_StrokesChanged;
+            //inkCanvas.UseCustomCursor = true;                     //zmienia kursor
+            //inkCanvas.EditingMode = InkCanvasEditingMode.None;    //zabrania rysowania
+
+            /*Ellipse myEllipse = new Ellipse();                    //rysowanie elipsy
+            SolidColorBrush mySolidColorBrush = new SolidColorBrush();
+            mySolidColorBrush.Color = Color.FromArgb(255, 255, 255, 0);
+            myEllipse.Fill = mySolidColorBrush;
+            myEllipse.StrokeThickness = 2;
+            myEllipse.Stroke = Brushes.Black;
+            myEllipse.Width = 200;
+            myEllipse.Height = 100;
+            inkCanvas.Children.Add(myEllipse);*/
         }
 
 
@@ -110,7 +127,7 @@ namespace DrawAndPlug
             inkCanvas.Strokes.Remove(_removed);
             handle = true;
         }
-
+        
         private void Strokes_StrokesChanged(object sender, System.Windows.Ink.StrokeCollectionChangedEventArgs e)
         {
             if (handle)
@@ -122,27 +139,87 @@ namespace DrawAndPlug
 
         private void GreenStroke_Clicked(object sender, RoutedEventArgs e)
         {
-            inkCanvas.DefaultDrawingAttributes.Color = Colors.Green;
+            selectedColor = Colors.Green;
+            inkCanvas.DefaultDrawingAttributes.Color = selectedColor;
         }
 
         private void BlackStroke_Clicked(object sender, RoutedEventArgs e)
         {
-            inkCanvas.DefaultDrawingAttributes.Color = Colors.Black;
+            selectedColor = Colors.Black;
+            inkCanvas.DefaultDrawingAttributes.Color = selectedColor;
         }
 
         private void BlueStroke_Clicked(object sender, RoutedEventArgs e)
         {
-            inkCanvas.DefaultDrawingAttributes.Color = Colors.Blue;
+            selectedColor = Colors.Blue;
+            inkCanvas.DefaultDrawingAttributes.Color = selectedColor;
         }
 
         private void RedStroke_Clicked(object sender, RoutedEventArgs e)
         {
-            inkCanvas.DefaultDrawingAttributes.Color = Colors.Red;
+            selectedColor = Colors.Red;
+            inkCanvas.DefaultDrawingAttributes.Color = selectedColor;
         }
 
         private void Clear_Clicked(object sender, RoutedEventArgs e)
         {
             inkCanvas.Strokes.Clear();
+            inkCanvas.Children.Clear();
+        }
+
+        private void canvas_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (rectangleMode)
+            {
+                startingPosition = e.GetPosition(inkCanvas);
+            }
+        }
+
+        private void canvas_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            if (rectangleMode)
+            {
+                endingPosition = e.GetPosition(inkCanvas);
+                DrawRectangle();
+            }
+        }
+
+        private void PenTool_Clicked(object sender, RoutedEventArgs e)
+        {
+            rectangleMode = false;
+            inkCanvas.EditingMode = InkCanvasEditingMode.Ink;
+            inkCanvas.UseCustomCursor = false;
+        }
+
+        private void RectangleTool_Clicked(object sender, RoutedEventArgs e)
+        {
+            rectangleMode = true;
+            inkCanvas.EditingMode = InkCanvasEditingMode.None;
+            inkCanvas.UseCustomCursor = true;
+        }
+
+        private void DrawRectangle()
+        {
+            double width = Math.Abs(startingPosition.X - endingPosition.X);
+            double heigth = Math.Abs(startingPosition.Y - endingPosition.Y);
+
+            Rectangle rect = new Rectangle();
+            rect.Stroke = new SolidColorBrush(selectedColor);
+            rect.Fill = new SolidColorBrush(selectedColor);
+            rect.Width = width;
+            rect.Height = heigth;
+
+            if (startingPosition.X < endingPosition.X)
+                InkCanvas.SetLeft(rect, startingPosition.X);
+            else
+                InkCanvas.SetLeft(rect, endingPosition.X);
+
+            if (startingPosition.Y < endingPosition.Y)
+                InkCanvas.SetTop(rect, startingPosition.Y);
+            else
+                InkCanvas.SetTop(rect, endingPosition.Y);
+
+            inkCanvas.Children.Add(rect);
         }
     }
 }
